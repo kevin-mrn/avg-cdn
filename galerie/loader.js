@@ -4,7 +4,7 @@
     const response = await fetch(BASE + "index.html");
     const html = await response.text();
 
-    document.querySelector("#galerie").innerHTML = html;
+    document.querySelector("#conteneur-galerie").innerHTML = html;
 
     const css = document.createElement("link");
     css.rel = "stylesheet";
