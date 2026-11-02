@@ -1,0 +1,187 @@
+.description {
+    width: 100%;
+    border: 6px double;
+    padding: 20px;
+    padding-bottom: 5px;
+    font-size: 1em;
+    font-style: italic;
+    text-align: justify;
+    margin-bottom: 10px;
+}
+
+/* La galerie */
+.galerie {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.galerie img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+}
+
+
+/* Lightbox */
+#lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+#lightbox.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#lightbox-img {
+    max-width: 90%;
+    max-height: 90%;
+    margin-top: 2%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
+#close-btn {
+    position: absolute;
+    top: calc(10px + 5vh);
+    right: 20px;
+    font-size: 24px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* Le compteur d'image */
+#counter {
+    position: absolute;
+    top: calc(10px + 5vh);
+    left: 20px;
+    font-size: 14px;
+    color: #000;
+    background: rgba(255,255,255,0.7);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+/* Les flèches */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 32px;
+    color: rgba(255,255,255,0);
+    user-select: none;
+    z-index: 1;
+}
+
+#prev { left: 10%; }
+#next { right: 10%; }
+
+.click-zone {
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    width: 30%;
+    z-index: 2;
+    cursor: pointer;
+}
+
+#left-zone:hover ~ #prev,
+#right-zone:hover ~ #next {
+    color: #000;
+}
+
+#left-zone { left: 0; }
+#right-zone { right: 0; }
+
+/* Les fonctions de partages */
+#share-btn {
+    position: absolute;
+    top: calc(10px + 5vh);
+    right: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#share-btn i { pointer-events: none; }
+#share-btn > i.eicon-share-arrow { color: #000; }
+
+#share-links {
+    display: none;
+    position: absolute;
+    top: 28px;
+    right: 0;    background: rgba(0,0,0,0.85);
+    border-radius: 6px;
+    padding: 6px 0;
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    color: #fff;
+    z-index: 11;
+}
+
+#share-links a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    text-decoration: none;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+#share-links a i { font-size: 16px; }
+#share-links a:hover { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+/* ===== Version mobile ===== */
+@media (max-width: 768px) {
+    .galerie { grid-template-columns: repeat(2, 1fr); }
+    
+    .arrow {
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 4px;
+        color: white;
+        text-align: center;
+        z-index: 3;
+    }
+    
+    #close-btn,
+    #share-btn,
+    #counter {
+        top: 5%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #counter { font-size: 18px; padding: 6px 10px; }
+    
+    #share-btn { right: 80px; }
+    
+    #share-btn i,
+    #close-btn i { font-size: 32px; }
+    
+    #prev { left: 10px; } #next { right: 10px; }
+    
+    .click-zone { width: 35%; top: 10%; bottom: 10%; }
+}
