@@ -14,7 +14,7 @@
     const script = document.createElement("script");
     script.src = BASE + "script.js";
     script.onload = () => {
-        // Le HTML est chargé, le script peut fonctionner.
+        // Vide
     };
     document.body.appendChild(script);
 })();
