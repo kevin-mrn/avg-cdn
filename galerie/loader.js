@@ -1,4 +1,4 @@
-(function () {
+(async () => {
     const BASE = "https://cdn.jsdelivr.net/gh/kevin-mrn/avg-cdn@main/galerie/";
 
     const container = document.querySelector("#conteneur-galerie");
@@ -8,14 +8,12 @@
         return;
     }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", BASE + "index.html", true);
-    xhr.onload = function () {
-        if (xhr.status !== 200) {
-            displayError("Erreur lors du chargement de la page.");
-            return;
+      const response = await fetch(BASE + "index.html");
+        if (!response.ok) {
+            throw new Error(`Erreur HTML : ${response.status}`);
         }
-        container.innerHTML = xhr.responseText;
+        const html = await response.text();
+        container.innerHTML = html;
 
         const css = document.createElement("link");
         css.rel = "stylesheet";
@@ -27,13 +25,6 @@
             displayError("Erreur lors du chargement de l'affichage.");
         };
         document.head.appendChild(css);
-    };
-
-    xhr.onerror = function () {
-        displayError("Erreur réseau.");
-    };
-    xhr.send();
-
 
     // Chargement du JavaScript
     function loadScript() {
