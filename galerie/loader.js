@@ -1,48 +1,42 @@
 (async () => {
-  const BASE = "https://cdn.jsdelivr.net/gh/kevin-mrn/avg-cdn@main/galerie/";
+    const BASE = "https://cdn.jsdelivr.net/gh/kevin-mrn/avg-cdn@main/galerie/";
 
-  const container = document.querySelector("#conteneur-galerie");
+    try {
+        const container = document.querySelector("#conteneur-galerie");
+        if (!container) {
+            throw new Error("Conteneur de galerie introuvable");
+        }
 
-  if (!container) {
-      console.error("[AVG Galerie] Conteneur introuvable");
-      return;
-  }
-  //Le CSS
-  const css = document.createElement("link");
-  css.rel = "stylesheet";
-  css.href = BASE + "style.css";
-  css.onload = function () {
-    loadScript();
-  };
-  css.onerror = function () {
-    displayError("Erreur lors du chargement de l'affichage.");
-  };
-  document.head.appendChild(css);
+        const response = await fetch(BASE + "index.html");
+        if (!response.ok) {
+            throw new Error(`Erreur HTML : ${response.status}`);
+        }
+        const html = await response.text();
+        container.innerHTML = html;
+        const css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = BASE + "style.css";
+        document.head.appendChild(css);
+        
 
-  //Le HTML
-  const response = await fetch(BASE + "index.html");
-  if (!response.ok) {
-    throw new Error(`Erreur HTML : ${response.status}`);
-  }
-  const html = await response.text();
-  container.innerHTML = html;
+        await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = BASE + "script.js";
 
+            script.onload = resolve;
+            script.onerror = () => reject(new Error("Erreur JS"));
 
-  // Chargement du JavaScript
-  function loadScript() {
-    const script = document.createElement("script");
+            document.body.appendChild(script);
+        });
 
-    script.src = BASE + "script.js";
+    } catch (error) {
+        console.error("[AVG Galerie]", error);
 
-    script.onerror = function () {
-      displayError("Impossible de charger le Javascript.");
-    };
-    document.body.appendChild(script);
-  }
+        const container = document.querySelector("#conteneur-galerie");
 
-  function displayError(message) {
-      console.error("[AVG Galerie]", message);
-      container.innerHTML = `<p>${message}</p>`;
-  }
-
+        if (container) {
+            container.innerHTML =
+                "<p>Impossible de charger la galerie. Veuillez actualiser la page.</p>";
+        }
+    }
 })();
