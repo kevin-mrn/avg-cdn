@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async function() {    
+(async function() {    
     // Liens des images
     const baseUrl = "https://media.morenokevin.ch/"; //image originale
     const thumbBase = "https://thumb.morenokevin.ch/"; // version miniature
@@ -127,4 +127,4 @@ document.addEventListener("DOMContentLoaded", async function() {
     shareBtn.addEventListener('click', () => {
         shareLinks.style.display = shareLinks.style.display === 'block' ? 'none' : 'block';
     });
-});
+})();
