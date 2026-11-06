@@ -1,16 +1,22 @@
 <div class="galerie"></div>
 
-<div id="lightbox">
-    <div id="share-btn">
-        <i class="eicon-share-arrow"></i>
+<div id="lightbox" aria-hidden="true">
+    <div id="share-btn" aria-label="Options de partage">
+      <!--Icone de partage-->
+        <i class="eicon-share-arrow" aria-hidden="true"></i>
+        <!-- Les possibilités de partage-->
         <div id="share-links">
-            <a id="share-facebook" target="_blank">
-                <i class="eicon-facebook" aria-hidden="true"></i>
-                Partager sur Facebook
+          <!-- Facebook-->
+            <a id="share-facebook" target="_blank" rel="noopener noreferrer">
+                <i class="eicon-facebook" aria-hidden="true"></i>Partager sur Facebook
             </a>
+            <!-- Lien de la photo-->
+            <a id="photo-link" href="#">
+                <i class="eicon-link" aria-hidden="true"></i>Copier le lien de la photo
+            </a>
+            <!-- Télécharger -->
             <a id="download-image" href="#">
-                <i class="eicon-download-bold" aria-label="Télécharger"></i>
-                Télécharger l'image
+                <i class="eicon-download-bold" aria-hidden="true"></i>Télécharger l'image
             </a>
         </div>
     </div>

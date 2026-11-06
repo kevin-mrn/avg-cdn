@@ -1,4 +1,5 @@
-(async function() {    
+(async function() {
+
     // Liens des images
     const baseUrl = "https://media.morenokevin.ch/"; //image originale
     const thumbBase = "https://thumb.morenokevin.ch/"; // version miniature
@@ -6,23 +7,43 @@
     // divers éléments
     const galerie = document.querySelector('.galerie');
     const lightbox = document.getElementById('lightbox');
+    const search = document.getElementById("galerie-search");
+
+    //La lightbox
     const lightboxImg = document.getElementById('lightbox-img');
     const closeBtn = document.getElementById('close-btn');
-    const leftZone = document.getElementById('left-zone');
-    const rightZone = document.getElementById('right-zone');
-    const prevArrow = document.getElementById('prev');
-    const nextArrow = document.getElementById('next');
-    const counter = document.getElementById('counter');
-    const fbLink = document.getElementById('share-facebook');
-    const downloadLink = document.getElementById('download-image');
+    //Bouton partage
     const shareBtn = document.getElementById('share-btn');
     const shareLinks = document.getElementById('share-links');
+    //Les liens
+    const fbLink = document.getElementById('share-facebook');
+    const downloadLink = document.getElementById('download-image');
+    const copyLink = document.getElementById("photo-link");
 
+    //gauche
+    const prevArrow = document.getElementById('prev');
+    const leftZone = document.getElementById('left-zone');
+    //droite
+    const rightZone = document.getElementById('right-zone');
+    const nextArrow = document.getElementById('next');
+    //compteur
+    const counter = document.getElementById('counter');
+    
+    let imgs = [];
     let currentIndex = 0;
 
-    //Le code qui récupère les images étant liés au dossier dans "NOM_DOSSIER"
+
+
+    await getImages(baseUrl, galerie);
+    addClick(galerie);
+    openSharedImage();
+    updateMetaTags();
+
+
+async function getImages(url, galerie) {
+//Le code qui récupère les images étant liés au dossier dans "NOM_DOSSIER"
     try {
-        const response = await fetch(baseUrl + "list?prefix=" + NOM_DOSSIER);
+        const response = await fetch(url + "list?prefix=" + NOM_DOSSIER);
         if (!response.ok) throw new Error("Impossible de charger le JSON");
         const allImages = await response.json();
 
@@ -34,97 +55,185 @@
 
             galerie.appendChild(img);
         });
+
+        imgs = Array.from(galerie.querySelectorAll("img"));
+
     } catch (err) {
         console.error("Erreur : Le dossier n'existe pas", err);
     }
+
+}
+
+//Rajoute le click sur les photos
+function addClick() {
+  //Ajoute la fonction de click sur les images
+  galerie.addEventListener('click', (e) => {
+  const img = e.target.closest("img");
+  if (!img || !galerie.contains(img)) return;
+
+  const index = imgs.indexOf(img);
+  openLightbox(index);
+  });
+}
+
+/* SECTION LIGHTBOX */
+
+//Ouvre la Lightbox qui affiche les images en grands
+function openLightbox(index) {
+    currentIndex = index;
+
+    lightboxImg.src = imgs[currentIndex].dataset.full;
+
+    updateCounter();
+    lightbox.classList.add('open');
+    shareLinks.style.display = 'none';
+}
     
-    //Ajoute la fonction de click sur les images
-    galerie.addEventListener('click', function(e) {
-        if (e.target.tagName === 'IMG') {
-            const imgs = Array.from(galerie.querySelectorAll('img'));
-            const index = imgs.indexOf(e.target);
-            openLightbox(index);
-        }
+//Ferme la Lightbox
+closeBtn.addEventListener('click', () => {
+  lightbox.classList.remove('open');
+  lightboxImg.src = "";
+  currentIndex = 0;
+
+  const url = new URL(window.location.href);
+  url.searchParams.delete("img");
+
+  history.replaceState({}, "", url);
+})
+
+/* SECTION CHANGEMENT D'IMAGE */
+
+//Change les images
+function changeImage(step) {
+    currentIndex += step;
+
+    if (currentIndex < 0) currentIndex = imgs.length - 1;
+    if (currentIndex >= imgs.length) currentIndex = 0;
+
+    lightboxImg.src = imgs[currentIndex].dataset.full; 
+    updateCounter();
+}
+
+//Rajoute l'event pour le changement d'image
+leftZone.addEventListener('click', () => changeImage(-1));
+rightZone.addEventListener('click', () => changeImage(1));
+prevArrow.addEventListener('click', () => changeImage(-1));
+nextArrow.addEventListener('click', () => changeImage(1));
+
+//Compteur d'image
+function updateCounter() {
+    counter.textContent = `${currentIndex + 1} / ${imgs.length}`;
+
+    const imageName = imgs[currentIndex].dataset.full.split('/').pop();
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("img", imageName);
+
+    history.replaceState({}, "", url);
+}
+
+
+function openSharedImage() {
+    const params = new URLSearchParams(window.location.search);
+    const imageName = params.get("img");
+
+    if (!imageName) return;
+
+    const index = imgs.findIndex(img => {
+        return img.dataset.full.split('/').pop() === imageName;
     });
-    
-    //Ouvre la Lightbox qui affiche les images en grands
-    function openLightbox(index) {
-        const imgs = Array.from(galerie.querySelectorAll('img'));
-        currentIndex = index;
-        lightboxImg.src = imgs[currentIndex].dataset.full;
-        updateCounter();
-        updateShareLinks();
-        lightbox.classList.add('open');
-        shareLinks.style.display = 'none';
+
+    if (index !== -1) {
+        openLightbox(index);
     }
-    
-    //Ferme la Lightbox
-    closeBtn.addEventListener('click', () => lightbox.classList.remove('open'));
+}
 
-    //Change les images avec le click sur les flèches
-    function changeImage(step) {
-        const imgs = Array.from(galerie.querySelectorAll('img'));
-        currentIndex += step;
-        if (currentIndex < 0) currentIndex = imgs.length - 1;
-        if (currentIndex >= imgs.length) currentIndex = 0;
-        lightboxImg.src = imgs[currentIndex].dataset.full; 
-        updateCounter();
-        updateShareLinks();
+
+
+downloadLink.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const imageUrl = imgs[currentIndex].dataset.full;
+
+    try {
+        const response = await fetch(imageUrl);
+
+        if (!response.ok) throw new Error("Impossible de récupérer l'image");
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        const number = String(currentIndex + 1).padStart(4, '0');
+
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = `${NOM_PHOTO}_${number}.jpg`;
+
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+
+    } catch (error) {
+        console.error("Erreur lors du téléchargement :", error);
+        window.open(imageUrl, "_blank");
     }
+});
 
-    //Ecoute le click
-    leftZone.addEventListener('click', () => changeImage(-1));
-    rightZone.addEventListener('click', () => changeImage(1));
-    prevArrow.addEventListener('click', () => changeImage(-1));
-    nextArrow.addEventListener('click', () => changeImage(1));
 
-    //Compteur d'image
-    function updateCounter() {
-        const imgs = Array.from(galerie.querySelectorAll('img'));
-        counter.textContent = `${currentIndex + 1} / ${imgs.length}`;
+copyLink.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const imageUrl = imgs[currentIndex].dataset.full;
+    const imageName = imageUrl.split('/').pop();
+
+    const pageUrl = new URL(window.location.href);
+    pageUrl.searchParams.set("img", imageName);
+
+    try {
+        await navigator.clipboard.writeText(pageUrl.href);
+    } catch (error) {
+        console.error("Impossible de copier le lien :", error);
     }
+});
 
-    //partage d'image
-    function updateShareLinks() {
-        const pageUrl = encodeURIComponent(`${window.location.href}#image-${currentIndex}`);
+fbLink.addEventListener('click', (e) => {
+        const pageUrl = encodeURIComponent(`${window.location.href}`);
         fbLink.href = `https://www.facebook.com/sharer.php?u=${pageUrl}`;
-        downloadLink.onclick = async function(e) {
-                e.preventDefault();
-        
-                const imageUrl = lightboxImg.src;
-        
-                try {
-                    const response = await fetch(imageUrl);
-        
-                    if (!response.ok) {
-                        throw new Error("Impossible de récupérer l'image");
-                    }
-        
-                    const blob = await response.blob();
-        
-                    const blobUrl = URL.createObjectURL(blob);
-        
-                    const a = document.createElement("a");
-                    a.href = blobUrl;
-                    a.download = "image.jpg";
-        
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-        
-                    URL.revokeObjectURL(blobUrl);
-        
-                } catch (error) {
-                    console.error("Erreur lors du téléchargement :", error);
-        
-                    // Fallback : ouverture de l'image
-                    window.open(imageUrl, "_blank");
-                }
-            };
-    }
+});
 
-    //Affiche les options de partage
-    shareBtn.addEventListener('click', () => {
-        shareLinks.style.display = shareLinks.style.display === 'block' ? 'none' : 'block';
+
+function updateMetaTags() {
+    const imageUrl = imgs[currentIndex].dataset.full;
+    const imageName = imageUrl.split('/').pop();
+
+    const metas = {
+        "og:title": `Galerie AVG - ${imageName}`,
+        "og:description": "Retrouvez les photos de la compétition.",
+        "og:image": imageUrl,
+        "og:url": window.location.href,
+        "og:type": "website"
+    };
+
+    Object.entries(metas).forEach(([property, content]) => {
+        let meta = document.querySelector(`meta[property="${property}"]`);
+
+        if (!meta) {
+            meta = document.createElement("meta");
+            meta.setAttribute("property", property);
+            document.head.appendChild(meta);
+        }
+
+        meta.setAttribute("content", content);
     });
+}
+
+
+  //Affiche les options de partage
+  shareBtn.addEventListener('click', () => {
+      shareLinks.style.display = shareLinks.style.display === 'block' ? 'none' : 'block';
+  });
+
+
 })();
