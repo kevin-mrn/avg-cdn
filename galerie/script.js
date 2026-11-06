@@ -205,28 +205,11 @@ fbLink.addEventListener('click', (e) => {
 
 
 function updateMetaTags() {
-    const imageUrl = imgs[currentIndex].dataset.full;
-    const imageName = imageUrl.split('/').pop();
+    const titre = document.querySelector("h1.post_title.entry-title");
 
-    const metas = {
-        "og:title": `Galerie AVG - ${imageName}`,
-        "og:description": "Retrouvez les photos de la compétition.",
-        "og:image": imageUrl,
-        "og:url": window.location.href,
-        "og:type": "website"
-    };
-
-    Object.entries(metas).forEach(([property, content]) => {
-        let meta = document.querySelector(`meta[property="${property}"]`);
-
-        if (!meta) {
-            meta = document.createElement("meta");
-            meta.setAttribute("property", property);
-            document.head.appendChild(meta);
-        }
-
-        meta.setAttribute("content", content);
-    });
+    if (titre) {
+        titre.textContent = "TEST DE PARTAGE";
+    }
 }
 
 
