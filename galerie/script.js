@@ -37,8 +37,6 @@
     await getImages(baseUrl, galerie);
     addClick(galerie);
     openSharedImage();
-    updateMetaTags();
-
 
 async function getImages(url, galerie) {
 //Le code qui récupère les images étant liés au dossier dans "NOM_DOSSIER"
@@ -202,15 +200,6 @@ fbLink.addEventListener('click', (e) => {
         const pageUrl = encodeURIComponent(`${window.location.href}`);
         fbLink.href = `https://www.facebook.com/sharer.php?u=${pageUrl}`;
 });
-
-
-function updateMetaTags() {
-    const titre = document.querySelector("h1.post_title.entry-title");
-
-    if (titre) {
-        titre.textContent = "TEST DE PARTAGE";
-    }
-}
 
 
   //Affiche les options de partage
