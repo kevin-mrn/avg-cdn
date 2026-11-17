@@ -1,40 +1,53 @@
+<div class="galerie-outils">
+    <label for="galerie-recherche">Rechercher des photos</label>
+    <input id="galerie-recherche" type="search" placeholder="N° dossard, catégorie ou podium." autocomplete="off">
+    <span id="galerie-resultats"></span>
+</div>
+
 <div class="galerie"></div>
 
-<div id="lightbox" aria-hidden="true">
-    <div id="share-btn" aria-label="Options de partage">
-      <!--Icone de partage-->
-        <i class="eicon-share-arrow" aria-hidden="true"></i>
-        <!-- Les possibilités de partage-->
-        <div id="share-links">
-          <!-- Facebook-->
-            <a id="share-facebook" target="_blank" rel="noopener noreferrer">
-                <i class="eicon-facebook" aria-hidden="true"></i>Partager sur Facebook
-            </a>
-            <!-- Lien de la photo-->
-            <a id="photo-link" href="#">
-                <i class="eicon-link" aria-hidden="true"></i>Copier le lien de la photo
-            </a>
-            <!-- Télécharger -->
-            <a id="download-image" href="#">
-                <i class="eicon-download-bold" aria-hidden="true"></i>Télécharger l'image
-            </a>
-        </div>
-    </div>
 
-    <span id="close-btn">
-        <i class="eicon-close"></i>
-    </span>
+<div id="lightbox" aria-hidden="true">
+
     <span id="counter"></span>
+
+
+    <div id="right-menu">
+        <div id="share-btn" aria-label="Options de partage">
+            <!--Icone de partage-->
+            <i class="icon-share" aria-hidden="true"></i>
+            <!-- Les possibilités de partage-->
+            <div id="share-links">
+                <!-- Facebook-->
+                <a id="share-facebook" target="_blank" rel="noopener noreferrer">
+                    <i class="eicon-facebook" aria-hidden="true"></i>Partager sur Facebook
+                </a>
+                <a id="share-whatsapp" target="_blank" rel="noopener noreferrer">
+                    <i class="icon-whatsapp" aria-hidden="true"></i>Partager sur WhatsApp
+                </a>
+                <!-- Lien de la photo-->
+                <a id="photo-link">
+                    <i class="eicon-link" aria-hidden="true"></i>Copier le lien de l'image
+                </a>
+                <!-- Télécharger -->
+                <a id="download-image">
+                    <i class="eicon-download-bold" aria-hidden="true"></i>Télécharger l'image
+                </a>
+            </div>
+        </div>
+
+        <span id="close-btn">
+            <i class="eicon-close"></i>
+        </span>
+    </div>
 
     <div id="left-zone" class="click-zone"></div>
     <div id="right-zone" class="click-zone"></div>
-
     <span id="prev" class="arrow">
         <i class="eicon-chevron-left"></i>
     </span>
     <span id="next" class="arrow">
         <i class="eicon-chevron-right"></i>
     </span>
-
     <img id="lightbox-img">
 </div>

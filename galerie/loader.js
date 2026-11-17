@@ -6,9 +6,12 @@
     // Chargement des différentes ressources
     await loadCSS("style.css", SrcGalerie);
     await loadCSS("lightbox.css", SrcGalerie);
+    await loadCSS("lightbox-menu.css", SrcGalerie);
     await loadHTML("index.html", SrcGalerie);
     await loadJS("script.js", SrcGalerie);
-
+    await loadJS("lightbox.js", SrcGalerie);
+    await loadJS("share.js", SrcGalerie);
+    
     } catch (error) {
         console.error("[AVG]", error);
     }

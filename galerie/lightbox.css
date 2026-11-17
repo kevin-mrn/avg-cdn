@@ -2,7 +2,7 @@
 #lightbox {
     position: fixed;
     inset: 0;
-    background: rgba(255,255,255,0.7);
+    background: rgba(0,0,0,0.7);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -24,30 +24,7 @@
     object-fit: contain;
     position: relative;
     z-index: 1;
-}
-
-#close-btn {
-    position: absolute;
-    top: calc(10px + 5vh);
-    right: 20px;
-    font-size: 24px;
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 2;
-}
-
-/* Le compteur d'image */
-#counter {
-    position: absolute;
-    top: calc(10px + 5vh);
-    left: 20px;
-    font-size: 14px;
-    color: #000;
-    background: rgba(255,255,255,0.7);
-    padding: 4px 8px;
-    border-radius: 4px;
-    z-index: 2;
+    cursor: default;
 }
 
 /* Les flèches */
@@ -58,6 +35,7 @@
     font-size: 32px;
     color: rgba(255,255,255,0);
     user-select: none;
+    cursor: pointer;
     z-index: 1;
 }
 
@@ -66,8 +44,8 @@
 
 .click-zone {
     position: absolute;
-    top: 10%;
-    bottom: 10%;
+    top: 12%;
+    bottom: 12%;
     width: 30%;
     z-index: 2;
     cursor: pointer;
@@ -75,53 +53,12 @@
 
 #left-zone:hover ~ #prev,
 #right-zone:hover ~ #next {
-    color: #000;
+    color: rgba(255,255,255,0.7);
+
 }
 
 #left-zone { left: 0; }
 #right-zone { right: 0; }
-
-/* Les fonctions de partages */
-#share-btn {
-    position: absolute;
-    top: calc(10px + 5vh);
-    right: 60px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 10;
-}
-
-#share-btn i { pointer-events: none; }
-#share-btn > i.eicon-share-arrow { color: #000; }
-
-#share-links {
-    display: none;
-    position: absolute;
-    top: 28px;
-    right: 0;    background: rgba(0,0,0,0.85);
-    border-radius: 6px;
-    padding: 6px 0;
-    min-width: 180px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 12px;
-    color: #fff;
-    z-index: 11;
-}
-
-#share-links a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    text-decoration: none;
-    color: #fff;
-    transition: background 0.2s;
-}
-
-#share-links a i { font-size: 16px; }
-#share-links a:hover { background: rgba(255,255,255,0.15); border-radius: 4px; }
-
 
 
 /* ===== Version mobile ===== */
@@ -132,31 +69,20 @@
         width: 40px;
         height: 40px;
         line-height: 40px;
-        background: rgba(0,0,0,0.3);
+        background: rgba(255,255,255,0.7);
         border-radius: 4px;
-        color: white;
+        color: black;
         text-align: center;
         z-index: 3;
     }
-    
-    #close-btn,
-    #share-btn,
-    #counter {
-        top: 5%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 
-    #counter { font-size: 18px; padding: 6px 10px; }
-    
-    #share-btn { right: 80px; }
-    
-    #share-btn i,
-    #close-btn i { font-size: 32px; }
-    
     #prev { left: 10px; } 
     #next { right: 10px; }
+
+    #left-zone:hover ~ #prev,
+    #right-zone:hover ~ #next {
+        color: black;
+    }
     
-    .click-zone { width: 35%; top: 10%; bottom: 10%; }
+    .click-zone { width: 35%; top: 20%; bottom: 20%; }
 }
